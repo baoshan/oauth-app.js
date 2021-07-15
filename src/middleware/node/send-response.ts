@@ -5,9 +5,9 @@ type ServerResponse = any;
 import { OctokitResponse } from "../types";
 
 export function sendResponse(
-  generalResponse: OctokitResponse,
+  octokitResponse: OctokitResponse,
   response: ServerResponse
 ) {
-  response.writeHead(generalResponse.status, generalResponse.headers);
-  response.end(generalResponse.text);
+  response.writeHead(octokitResponse.status, octokitResponse.headers);
+  response.end(octokitResponse.text);
 }

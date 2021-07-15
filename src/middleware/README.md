@@ -2,7 +2,7 @@
 
 If you want to use Node.js middleware, read main [README.md](../../README.md#createnodemiddlewareapp-options) instead. If you need to implement a handler/middleware for another environment, read this document.
 
-The `middleware` directory contains the generic HTTP handler. Each sub-directory (e.g., [`node`](node)) exposes an HTTP handler/middleware for the specific environment.
+The `middleware` directory contains the generic HTTP handler. Each sub-directory (e.g., [`node`](node)) exposes an HTTP handler/middleware for a specific environment.
 
 ```
 middleware
@@ -11,7 +11,7 @@ middleware
 ├── types.ts
 ├── node/
 ├── cloudflare/ (to be implemented)
-└── another environment/ (to be implemented)
+└── deno/ (to be implemented)
 ```
 
 ## Generic HTTP Handler

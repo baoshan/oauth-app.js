@@ -1,6 +1,6 @@
 // remove type imports from http for Deno compatibility
 // see https://github.com/octokit/octokit.js/issues/2075#issuecomment-817361886
-// import { IncomingMessage, ServerResponse } from "http";
+// import { ServerResponse } from "http";
 type ServerResponse = any;
 import { OctokitResponse } from "../types";
 

@@ -11,7 +11,6 @@ middleware
 ├── types.ts
 ├── node/
 ├── web-worker/ (Cloudflare Workers & Deno)
-└── deno/ (to be implemented)
 ```
 
 ## Generic HTTP Handler

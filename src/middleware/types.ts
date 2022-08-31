@@ -1,8 +1,8 @@
 export type OctokitRequest = {
   method: string;
   url: string;
-  headers: Record<string, string>;
-  text: () => Promise<string>;
+  headers?: Record<string, string>;
+  text?: string;
 };
 
 export type OctokitResponse = {

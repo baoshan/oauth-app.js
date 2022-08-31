@@ -1,14 +1,12 @@
 import { OAuthApp } from "../index";
 import { HandlerOptions, OctokitRequest, OctokitResponse } from "./types";
 import { ClientType, Options } from "../types";
-// @ts-ignore - requires esModuleInterop flag
-import fromEntries from "fromentries";
 
 export async function handleRequest(
   app: OAuthApp<Options<ClientType>>,
   { pathPrefix = "/api/github/oauth" }: HandlerOptions,
   request: OctokitRequest
-): Promise<OctokitResponse | null> {
+): Promise<OctokitResponse> {
   if (request.method === "OPTIONS") {
     return {
       status: 200,
@@ -39,12 +37,18 @@ export async function handleRequest(
 
   // handle unknown routes
   if (!Object.values(routes).includes(route)) {
-    return null;
+    return {
+      status: 404,
+      headers: { "content-type": "application/json" },
+      text: JSON.stringify({
+        error: `Unknown route: ${request.method} ${request.url}`,
+      }),
+    };
   }
 
   let json: any;
   try {
-    const text = await request.text();
+    const text = request.text;
     json = text ? JSON.parse(text) : {};
   } catch (error) {
     return {
@@ -59,7 +63,7 @@ export async function handleRequest(
     };
   }
   const { searchParams } = new URL(request.url as string, "http://localhost");
-  const query = fromEntries(searchParams) as {
+  const query = Object.fromEntries(searchParams) as {
     state?: string;
     scopes?: string;
     code?: string;
@@ -69,7 +73,7 @@ export async function handleRequest(
     error_description?: string;
     error_url?: string;
   };
-  const headers = request.headers as { authorization?: string };
+  const headers = (request.headers || {}) as { authorization?: string };
 
   try {
     if (route === routes.getLogin) {

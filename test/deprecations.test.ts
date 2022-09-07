@@ -1,7 +1,11 @@
 import { URL } from "url";
 import * as nodeFetch from "node-fetch";
 import fromEntries from "fromentries";
-import { createCloudflareHandler, OAuthApp } from "../src";
+import {
+  createAWSLambdaAPIGatewayV2Handler,
+  createCloudflareHandler,
+  OAuthApp,
+} from "../src";
 import { Octokit } from "@octokit/core";
 
 describe("deprecations", () => {
@@ -51,5 +55,29 @@ describe("deprecations", () => {
     expect(url.searchParams.get("client_id")).toEqual("client_id_123");
     expect(url.searchParams.get("state")).toMatch(/^\w+$/);
     expect(url.searchParams.get("scope")).toEqual(null);
+  });
+
+  it("createAWSLambdaAPIGatewayV2Handler works but logs out deprecation message", async () => {
+    const warn = jest.fn().mockResolvedValue(undefined);
+    const handleRequest = createAWSLambdaAPIGatewayV2Handler(
+      new OAuthApp({
+        clientType: "github-app",
+        clientId: "client_id_123",
+        clientSecret: "client_secret_456",
+        Octokit: Octokit.defaults({
+          log: {
+            debug: () => undefined,
+            info: () => undefined,
+            warn,
+            error: () => undefined,
+          },
+        }),
+      })
+    );
+
+    expect(warn.mock.calls.length).toEqual(1);
+    expect(warn.mock.calls[0][0]).toEqual(
+      "[@octokit/oauth-app] `createAWSLambdaAPIGatewayV2Handler` is deprecated and will be removed from the next major version."
+    );
   });
 });

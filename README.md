@@ -1057,6 +1057,8 @@ function onUnhandledRequest(request) {
 
 ### `createAWSLambdaAPIGatewayV2Handler(app, options)`
 
+**Deprecated and will be removed from the next major version.**
+
 Event handler for AWS Lambda using API Gateway V2 HTTP integration.
 
 ```js

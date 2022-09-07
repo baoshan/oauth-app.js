@@ -1,4 +1,4 @@
-import { OAuthApp, createAWSLambdaAPIGatewayV2Handler } from "../src/";
+import { createAWSLambdaAPIGatewayV2Handler, OAuthApp } from "../src/";
 import { URL } from "url";
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 
@@ -22,10 +22,12 @@ describe("createAWSLambdaAPIGatewayV2Handler(app)", () => {
   });
 
   it("fail-over to default unhandled request handler", async () => {
-    const appMock = {};
-    const handleRequest = createAWSLambdaAPIGatewayV2Handler(
-      appMock as unknown as OAuthApp
-    );
+    const app = new OAuthApp({
+      clientType: "github-app",
+      clientId: "0123",
+      clientSecret: "0123secret",
+    });
+    const handleRequest = createAWSLambdaAPIGatewayV2Handler(app);
 
     const response = await handleRequest({
       requestContext: { http: { method: "GET" }, stage: "prod" },
